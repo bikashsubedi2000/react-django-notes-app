@@ -1,17 +1,17 @@
 import React from 'react'
 import NoteCard from './NoteCard'
+import loader from './loader'
 
-const NoteCardContainer = () => {
+const NoteCardContainer = ({notes,loading}) => {
   return (
     <>
     <div className="container">
     <div className="note-has-grid row">
-    <NoteCard/>
-    <NoteCard/>
-    <NoteCard/>
-    <NoteCard/>
-    <NoteCard/>
-    <NoteCard/>
+
+      {loading && <Loader loading={loading}/>}
+
+      {notes.map(note=> <NoteCard key={note.id} note={note}/>
+  )}
 
 
       
