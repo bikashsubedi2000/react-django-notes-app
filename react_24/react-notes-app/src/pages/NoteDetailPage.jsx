@@ -4,11 +4,17 @@ import { FiEdit } from "react-icons/fi";
 import "./NotePageDetail.css"
 import { Link, useParams } from 'react-router-dom';
 import axios from "axios"
-// import Modal from "../components/Modal";
+import Modal from "../components/Modal";
 
-const NoteDetailPage = () => {
+const NoteDetailPage = ({deleteNote}) => {
   const [note, setNote] = useState({});
   const { slug } = useParams();
+  const[isOpen,setIsOpen]=useState(false)
+  
+  
+  const handleIsOpne=()=>{
+    setIsOpen(!isOpen)
+  }
 
   useEffect(() => {
     axios
@@ -33,9 +39,10 @@ const NoteDetailPage = () => {
     <p className="note-date font-12 text-muted me-5">last updated: {note.updated}</p>
     </span>
     <span className="button-group">
-      <Link to="/edit-note">  <button className="btn btn-primary"><FiEdit /><span>Edit</span></button>
+      <Link to={`/edit-note/${slug}`}>  <button className="btn btn-primary"><FiEdit /><span>Edit</span></button>
 </Link>
-      <button className="btn btn-danger"><BiSolidTrashAlt /><span>Delete</span></button>
+      <button className="btn btn-danger" onClick={handleIsOpne}>
+        <BiSolidTrashAlt /><span>Delete</span></button>
     </span>
     <p className="description">
       {note.body}
@@ -46,7 +53,7 @@ const NoteDetailPage = () => {
     
 
   </div>
-  {/* <Modal /> */}
+  {isOpen && <Modal handleIsOpen={handleIsOpne} deleteNote={()=>deleteNote(slug)}/>}
   </>
   )
 }

@@ -45,6 +45,37 @@ const addNote = async (data) => {
     toast.error("Failed to add a new note. Please try again."); // Add a user-friendly error toast
   }
 };
+const updateNote = async (slug, data) => {
+  try {
+    const res = await axios.put(`http://127.0.0.1:8008/notes/${slug}/`, data); // Ensure the URL ends with a slash to match REST API conventions
+    const { data: updatedNote } = res; // Destructure to get updated note data
+
+    // Optional: Update state if you're maintaining notes state in your component
+    // setNotes(prevNotes => prevNotes.map(note => note.id === updatedNote.id ? updatedNote : note));
+
+    toast.success("Note updated successfully!");
+    console.log(updatedNote);
+  } catch (err) {
+    console.error("Error updating note:", err.message); // Log more context in the error
+    toast.error("Failed to update the note. Please try again."); // User-friendly error message
+  }
+};
+
+
+
+const deleteNote = async (slug) => {
+  try {
+    await axios.delete(`http://127.0.0.1:8008/notes/${slug}/`); // Ensure the URL ends with a slash if required by your API
+
+    // Optional: Update state if you're maintaining notes state in your component
+    // setNotes((prevNotes) => prevNotes.filter((note) => note.id !== slug));
+
+  } catch (err) {
+    console.error("Error deleting note:", err.message); // Provide more context in the error log
+  }
+};
+
+
 
 
   const router =createBrowserRouter(createRoutesFromElements(
@@ -52,8 +83,8 @@ const addNote = async (data) => {
       <Route path="/" element={<MainLayouts/>}>
         <Route index element={<HomePage notes={notes} loading={isLoading}/>}/>
         <Route path="/add-notes" element={<AddNotePage addNote={addNote}/>}/>
-        <Route path="/notes/:slug" element={<NoteDetailPage/>}/>
-        <Route path="/edit-note/:slug" element={<EditNotePage/>}/>
+        <Route path="/notes/:slug" element={<NoteDetailPage deleteNote={deleteNote}/>}/>
+        <Route path="/edit-note/:slug" element={<EditNotePage updateNote={updateNote}/>}/>
 
 
 
