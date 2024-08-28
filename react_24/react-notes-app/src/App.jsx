@@ -8,6 +8,7 @@ import EditNotePage from './pages/EditNotePage'
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import filter from './components/Filter'
 
 
 
@@ -15,6 +16,28 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   const [notes,setNotes]= useState([])
   const [isLoading,setIsLoading]=useState(false)
+  const [filterText, setFilterText]=useState("")
+
+  const handleFilterText=(val)=>{
+    setFilterText(val)
+  }
+  const filteredNotes = (() => {
+    switch (filterText) {
+      case "BUSINESS":
+        return notes.filter(note => note.category === "BUSINESS");
+      case "PERSONAL":
+        return notes.filter(note => note.category === "PERSONAL");
+      case "IMPORTANT":
+        return notes.filter(note => note.category === "IMPORTANT");
+      default:
+        return notes; // Return all notes if no filter matches
+    }
+  })();
+  
+
+
+
+
   useEffect(() => {
     setIsLoading(true); // Set loading state to true before fetching data
   
@@ -81,7 +104,7 @@ const deleteNote = async (slug) => {
   const router =createBrowserRouter(createRoutesFromElements(
 
       <Route path="/" element={<MainLayouts/>}>
-        <Route index element={<HomePage notes={notes} loading={isLoading}/>}/>
+        <Route index element={<HomePage notes={filteredNotes} filterText={filterText} loading={isLoading} handleFilterText={handleFilterText}/>}/>
         <Route path="/add-notes" element={<AddNotePage addNote={addNote}/>}/>
         <Route path="/notes/:slug" element={<NoteDetailPage deleteNote={deleteNote}/>}/>
         <Route path="/edit-note/:slug" element={<EditNotePage updateNote={updateNote}/>}/>
