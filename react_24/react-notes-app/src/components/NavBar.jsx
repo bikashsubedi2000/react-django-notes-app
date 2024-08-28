@@ -4,7 +4,7 @@ import { FaSquarePlus } from "react-icons/fa6";
 
 
 
-const NavBar = () => {
+const NavBar = ({searchText,handleSearchText}) => {
   return (
     <nav className="navbar bg-body-tertiary py-50" style={{ padding: "20px" }}>
     <div className="container d-flex justify-content-around">
@@ -21,6 +21,8 @@ const NavBar = () => {
             type="search"
             placeholder="Search"
             aria-label="Search"
+            value={searchText}
+            onChange={(e)=>handleSearchText(e.target.value)}
           />
           <button className="btn btn-outline-success" type="submit">
             Search

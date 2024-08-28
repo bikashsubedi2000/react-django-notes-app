@@ -17,10 +17,16 @@ const App = () => {
   const [notes,setNotes]= useState([])
   const [isLoading,setIsLoading]=useState(false)
   const [filterText, setFilterText]=useState("")
-
+  const [searchText,setSearchText]=useState("")
+  
   const handleFilterText=(val)=>{
     setFilterText(val)
   }
+
+  const handleSearchText= (val)=>{
+    setSearchText(val)
+  }  ;
+  
   const filteredNotes = (() => {
     switch (filterText) {
       case "BUSINESS":
@@ -34,6 +40,25 @@ const App = () => {
     }
   })();
   
+  useEffect(() => {
+    if (searchText.length < 3) return; // Exit early if search text is too short
+  
+    const fetchNotes = async () => {
+      try {
+        const res = await axios.get(`http://127.0.0.1:8008/notes-search/?search=${searchText}`);
+        console.log(res.data);
+        setNotes(res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+  
+    fetchNotes();
+  
+  }, [searchText]); // Dependency array includes searchText
+  
+
+
 
 
 
@@ -103,7 +128,7 @@ const deleteNote = async (slug) => {
 
   const router =createBrowserRouter(createRoutesFromElements(
 
-      <Route path="/" element={<MainLayouts/>}>
+      <Route path="/" element={<MainLayouts searchText={searchText} handleSearchText={handleSearchText}/>}>
         <Route index element={<HomePage notes={filteredNotes} filterText={filterText} loading={isLoading} handleFilterText={handleFilterText}/>}/>
         <Route path="/add-notes" element={<AddNotePage addNote={addNote}/>}/>
         <Route path="/notes/:slug" element={<NoteDetailPage deleteNote={deleteNote}/>}/>
