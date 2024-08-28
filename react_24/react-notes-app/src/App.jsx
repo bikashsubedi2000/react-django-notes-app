@@ -53,7 +53,7 @@ const addNote = async (data) => {
         <Route index element={<HomePage notes={notes} loading={isLoading}/>}/>
         <Route path="/add-notes" element={<AddNotePage addNote={addNote}/>}/>
         <Route path="/notes/:slug" element={<NoteDetailPage/>}/>
-        <Route path="/edit-note" element={<EditNotePage/>}/>
+        <Route path="/edit-note/:slug" element={<EditNotePage/>}/>
 
 
 

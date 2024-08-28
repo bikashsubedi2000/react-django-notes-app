@@ -5,7 +5,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 
 
-const AddNotePage = (addNote) => {
+const AddNotePage = ({addNote}) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [category, setCategory] = useState("");
